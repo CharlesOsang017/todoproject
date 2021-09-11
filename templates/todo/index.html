@@ -1,0 +1,41 @@
+{% extends 'partials/base.html' %}
+
+{% block title %}App Todo {% endblock title %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="border p-3 shadow">
+    <form method="POST">
+    {% if messages %}
+    {% for message in messages %}
+    <p class="alert alert-success">{{message}}</p>
+    {% endfor %}
+    {% endif %}
+        {% csrf_token %}
+        {{form| crispy}}
+        <input type="submit" class="btn btn-success block" value = 'submit' type="submit">
+    </form>
+    <hr>
+    {% for todo in todos %}
+    <div class="border p-3 mb-3">
+        <small>{{todo.date}}</small>
+        <div class="row">
+            <div class="col-md-8">
+                {% if  todo.complete == True %}
+                <p><span class="btn btn-success btn-sm"><i class="fas fa-check"></i></span> {{todo.content}}</p>
+
+                {% else %}
+                <p>{{todo.content}}</p>
+                {% endif %}
+            </div>
+            <div class="col-md-4">
+                <a href="{% url 'update' todo.id%}" class="btn btn-info btn-sm">Edit</a>
+                <a href="{% url 'delete' todo.id %}" class="btn btn-danger btn-sm">Delete</a>
+
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock content %}
